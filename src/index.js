@@ -24,13 +24,16 @@ export default function (env, callback) {
       this.pages = pages;
     }
 
-    getFilename() {
+    get filename() {
       return 'robots.txt';
     }
+    getFilename() { return this.filename; }
 
-    getView() {
+    get view() {
       return robotsView;
     }
+    getView() { return this.view; }
+
   }
 
   env.registerGenerator('robots', (contents, callback) => {
