@@ -1,4 +1,4 @@
-module.exports = (env, callback) => {
+export default function (env, callback) {
 
   var robotsView = function (env, locals, contents, templates, callback) {
     var robots = [],
