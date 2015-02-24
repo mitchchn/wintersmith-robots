@@ -2,7 +2,7 @@ var wintersmith = require("wintersmith"),
     assert = require("assert"),
     fs = require("fs");
 
-// Setting these programatically would be more DRY,
+// Setting these programmatically would be more DRY,
 // but for simplicity's sake I want to see them in the flesh!
 const perPageConfig = {
   "locals": {
