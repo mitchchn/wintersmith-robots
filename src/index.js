@@ -1,30 +1,35 @@
 export default function (env, callback) {
+  
+  // uses 'wintersmith-contents' as implemented in 'wintersmith-sitemap':
+  // https://github.com/xavierdutreilh/wintersmith-sitemap
+  var getPages = (contents) => {
+      return env.helpers.contents.list(contents).filter( (item) =>
+        item instanceof env.plugins.MarkdownPage );
+  };
 
   var robotsView = function (env, locals, contents, templates, callback) {
-    var robots = [],
-        {url, sitemap, noindex} = locals;
+    var {url, sitemap, noindex} = locals,
+        ua = "User-agent: *";
 
-    robots.push("User-agent: *");
-    // Sitewide
-    if (noindex) robots.push("Disallow: /");
-
-    // Specific pages
-    for (let page of this.pages) {
-      if (page.metadata) {
-        if (page.metadata.noindex) robots.push(`Disallow: ${page.url}`);
-      }
-    }
+    // Global block, skip the rest
+    if (noindex) return callback(null, new Buffer(ua + "\nDisallow: /"));
     
-    if (sitemap) robots.push(`Sitemap: ${url}/${sitemap}`);
+    var disallowedPages =
+        getPages(contents)
+        .filter( page => page.metadata.noindex )
+        .map( page => `Disallow: ${page.url}`);
 
-    callback(null, new Buffer(robots.join('\n')));
+    var sitemapURL = sitemap ? (`Sitemap: ${url}/${sitemap}`) : null;
+    
+    var robots = []
+        .concat(ua, disallowedPages, sitemapURL)
+        .join('\n');
+
+    callback(null, new Buffer(robots));
   };
 
   class Robots extends env.plugins.Page {
-    constructor(pages) {
-      this.pages = pages;
-    }
-
+    
     get filename() {
       return 'robots.txt';
     }
@@ -38,10 +43,7 @@ export default function (env, callback) {
   }
 
   env.registerGenerator('robots', (contents, callback) => {
-    var pages = env.helpers.contents.list(contents).filter( (content) =>
-      content instanceof env.plugins.MarkdownPage );
-
-    var tree = {'robots.txt' : new Robots(pages)};
+    var tree = {'robots.txt' : new Robots()};
     callback(null, tree);
   });
 

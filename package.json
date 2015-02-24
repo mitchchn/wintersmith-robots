@@ -8,17 +8,22 @@
     "email": "mitch.cohen@me.com",
     "url": "http://mitchchn.me/"
   },
-  "keywords": ["wintersmith", "wintersmith-plugin"],
+  "keywords": [
+    "wintersmith",
+    "wintersmith-plugin"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/mitchchn/wintersmith-robots.git"
   },
   "main": "lib/",
   "scripts": {
-    "prepublish": "babel -d ./lib ./src"
+    "prepublish": "babel -d ./lib ./src",
+    "test": "mocha --compilers babel:babel/register"
   },
   "devDependencies": {
-    "babel": "^4.x"
+    "babel": "^4.x",
+    "mocha": "^2.1.0"
   },
   "dependencies": {
     "wintersmith": "^2.1.0",
