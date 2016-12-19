@@ -41,3 +41,11 @@ Set per-page options at the top of your Markdown files. For instance, you can pr
 noindex: true
 ---
 ```
+
+The above will generate a `Disallow: /path/to/page` entry in your `robots.txt`. which might not always be desirable (e.g., if a plugin transforms some page into some different form entirely).  You can completely ignore a page with the following:
+
+```yaml
+---
+noindex: exclude
+---
+```
