@@ -1,5 +1,5 @@
 export default function (env, callback) {
-  
+
   // uses 'wintersmith-contents' as implemented in 'wintersmith-sitemap':
   // https://github.com/xavierdutreilh/wintersmith-sitemap
   var getPages = (contents) => {
@@ -13,14 +13,15 @@ export default function (env, callback) {
 
     // Global block, skip the rest
     if (noindex) return callback(null, new Buffer(ua + "\nDisallow: /"));
-    
+
     var disallowedPages =
         getPages(contents)
-        .filter( page => page.metadata.noindex )
-        .map( page => `Disallow: ${page.url}`);
+        .filter(page => page.metadata.noindex &&
+                        page.metadata.noindex !== "exclude")
+        .map(page => `Disallow: ${page.url}`);
 
     var sitemapURL = sitemap ? (`Sitemap: ${url}/${sitemap}`) : null;
-    
+
     var robots = []
         .concat(ua, disallowedPages, sitemapURL)
         .join('\n');
@@ -29,7 +30,7 @@ export default function (env, callback) {
   };
 
   class Robots extends env.plugins.Page {
-    
+
     get filename() {
       return 'robots.txt';
     }
@@ -47,5 +48,5 @@ export default function (env, callback) {
     callback(null, tree);
   });
 
-  callback();  
+  callback();
 }
