@@ -28,7 +28,7 @@ Set sitewide options in Wintersmith's `config.json`. If `noindex` is set globall
 {
     "locals": {
         "sitemap": "sitemap.xml",
-        "noindex": "false"
+        "noindex": false
     }
 
 }
